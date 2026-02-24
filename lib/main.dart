@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+import 'screens/auth_wrapper.dart';
 import 'screens/home_screen.dart';
-import 'screens/search_page.dart';   // ✅ Use this
+import 'screens/search_page.dart';
 import 'screens/reels_screen.dart';
 import 'screens/profile_screen.dart';
-import 'screens/splash_screen.dart';
 import 'screens/create_post_screen.dart';
 import 'screens/create_reel_screen.dart';
 import 'screens/create_story_screen.dart';
 
-void main() {
+/// 🔥 MAIN FUNCTION WITH FIREBASE
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
+/// 🔥 ROOT APP
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -19,11 +30,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: AuthWrapper(), // ✅ stays same
     );
   }
 }
 
+/// 🔥 MAIN NAVIGATION AFTER LOGIN
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
 
@@ -36,10 +48,10 @@ class _MainNavigationState extends State<MainNavigation> {
 
   late final List<Widget> _pages = [
     const HomeScreen(),
-    const SearchPage(), // ✅ Correct search page
-    const SizedBox(),   // Placeholder for Add button
+    const SearchPage(),
+    const SizedBox(),
     const ReelsScreen(),
-    ProfileScreen(
+    const ProfileScreen(
       username: "meghana",
       profileImage: "https://i.pravatar.cc/150?img=1",
     ),
@@ -55,6 +67,7 @@ class _MainNavigationState extends State<MainNavigation> {
     }
   }
 
+  /// 🔥 CREATE POST / REEL / STORY
   void _showPostOptions() {
     showModalBottomSheet(
       context: context,
@@ -71,7 +84,7 @@ class _MainNavigationState extends State<MainNavigation> {
             children: [
               const SizedBox(height: 12),
 
-              // Drag handle
+              // Drag Handle
               Container(
                 width: 40,
                 height: 4,
